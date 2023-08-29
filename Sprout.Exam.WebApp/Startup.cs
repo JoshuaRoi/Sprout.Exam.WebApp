@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sprout.Exam.WebApp.Data;
 using Sprout.Exam.WebApp.Models;
+using Sprout.Exam.WebApp.Repositories;
+using Sprout.Exam.WebApp.Services;
 
 namespace Sprout.Exam.WebApp
 {
@@ -31,6 +33,10 @@ namespace Sprout.Exam.WebApp
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddScoped<IEmployeesRepository,EmployeesRepository>();
+
+            services.AddScoped<IEmployeesService, EmployeesService>();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();

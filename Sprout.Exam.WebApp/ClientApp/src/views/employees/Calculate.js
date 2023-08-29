@@ -105,7 +105,8 @@ export class EmployeeCalculate extends Component {
     };
     const response = await fetch('api/employees/' + this.state.id + '/calculate',requestOptions);
     const data = await response.json();
-    this.setState({ loadingCalculate: false,netIncome: data });
+    console.log(data.toString())
+    this.setState({ loadingCalculate: false,netIncome: Number(data).toFixed(2) });
   }
 
   async getEmployee(id) {
@@ -117,7 +118,7 @@ export class EmployeeCalculate extends Component {
 
     if(response.status === 200){
         const data = await response.json();
-        this.setState({ id: data.id,fullName: data.fullName,birthdate: data.birthdate,tin: data.tin,typeId: data.typeId, loading: false,loadingCalculate: false });
+        this.setState({ id: data.id,fullName: data.fullName,birthdate: data.birthdate,tin: data.tin,typeId: data.employeeTypeId, loading: false,loadingCalculate: false });
     }
     else{
         alert("There was an error occured.");

@@ -13,7 +13,7 @@ export class EmployeesIndex extends Component {
     this.populateEmployeeData();
   }
 
-  static renderEmployeesTable(employees,parent) {
+  static renderEmployeesTable(employees, parent) {
     return (
       <table className='table table-striped' aria-labelledby="tabelLabel">
         <thead>
@@ -26,21 +26,24 @@ export class EmployeesIndex extends Component {
           </tr>
         </thead>
         <tbody>
-          {employees.map(employee =>
-            <tr key={employee.id}>
-              <td>{employee.fullName}</td>
-              <td>{employee.birthdate}</td>
-              <td>{employee.tin}</td>
-              <td>{employee.typeId === 1?"Regular":"Contractual"}</td>
-              <td>
-              <button type='button' className='btn btn-info mr-2' onClick={() => parent.props.history.push("/employees/" + employee.id + "/edit")} >Edit</button>
-              <button type='button' className='btn btn-primary mr-2' onClick={() => parent.props.history.push("/employees/" + employee.id + "/calculate")}>Calculate</button>
-            <button type='button' className='btn btn-danger mr-2' onClick={() => {
-              if (window.confirm("Are you sure you want to delete?")) {
-                parent.deleteEmployee(employee.id);
-              } 
-            } }>Delete</button></td>
-            </tr>
+          {employees.map(employee => {
+            console.log(employee);
+              return (<tr key={employee.id}>
+                <td>{employee.fullName}</td>
+                <td>{employee.birthdate}</td>
+                <td>{employee.tin}</td>
+                <td>{employee.employeeTypeId === 1 ? "Regular" : "Contractual"}</td>
+                <td>
+                  <button type='button' className='btn btn-info mr-2' onClick={() => parent.props.history.push("/employees/" + employee.id + "/edit")} >Edit</button>
+                  <button type='button' className='btn btn-primary mr-2' onClick={() => parent.props.history.push("/employees/" + employee.id + "/calculate")}>Calculate</button>
+                  <button type='button' className='btn btn-danger mr-2' onClick={() => {
+                    if (window.confirm("Are you sure you want to delete?")) {
+                      parent.deleteEmployee(employee.id);
+                    }
+                  }}>Delete</button></td>
+              </tr>)
+          }
+
           )}
         </tbody>
       </table>
@@ -50,7 +53,7 @@ export class EmployeesIndex extends Component {
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
-      : EmployeesIndex.renderEmployeesTable(this.state.employees,this);
+      : EmployeesIndex.renderEmployeesTable(this.state.employees, this);
 
     return (
       <div>
@@ -74,16 +77,18 @@ export class EmployeesIndex extends Component {
   async deleteEmployee(id) {
     const token = await authService.getAccessToken();
     const requestOptions = {
-        method: 'DELETE',
-        headers: !token ? {} : { 'Authorization': `Bearer ${token}`,'Content-Type': 'application/json' }
+      method: 'DELETE',
+      headers: !token ? {} : { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
     };
-    const response = await fetch('api/employees/' + id,requestOptions);
-    if(response.status === 200){
-      this.setState({employees: this.state.employees.filter(function(employee) { 
-        return employee.id !== id
-      })});
+    const response = await fetch('api/employees/' + id, requestOptions);
+    if (response.status === 200) {
+      this.setState({
+        employees: this.state.employees.filter(function (employee) {
+          return employee.id !== id
+        })
+      });
     }
-    else{
+    else {
       alert("There was an error occured.");
     }
   }
