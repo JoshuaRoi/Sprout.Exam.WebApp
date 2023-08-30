@@ -12,6 +12,6 @@ namespace Sprout.Exam.WebApp.Repositories
         public Task<Employee> GetById(int id);
         public Task<int> Create(Employee employee);
         public Task<EditEmployeeDto> Update( EditEmployeeDto employeeUpdate,Employee employee);
-        public Task<bool> Delete(Employee id);
+        public Task<bool> Delete(Employee employee);
     }
 }
